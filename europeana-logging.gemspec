@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,lib}/**/*', 'LICENSE.md', 'Rakefile', 'README.md']
   s.test_files = Dir['test/**/*']
 
-  s.add_dependency 'rails', '~> 4.2.7.1'
+  s.add_dependency 'rails', '~> 4.2'
 
   s.add_dependency 'lograge', '~> 0.4'
   s.add_dependency 'logstash-event', '~> 1.2'
