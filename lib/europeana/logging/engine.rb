@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'lograge'
+require 'logstash-logger'
 
 module Europeana
   module Logging
