@@ -5,11 +5,6 @@ require 'logstash-logger'
 module Europeana
   module Logging
     class Engine < ::Rails::Engine
-      # Set log level
-      initializer 'europeana_logging.set_log_level' do |app|
-        app.config.log_level = (Rails.env == 'production' ? :info : :debug)
-      end
-
       # Enable lograge
       initializer 'europeana_lobbing.enable_lograge' do |app|
         app.config.lograge.enabled = true
