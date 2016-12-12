@@ -6,31 +6,29 @@ module Europeana
   module Logging
     class Engine < ::Rails::Engine
       # Enable lograge
-      initializer 'europeana_lobbing.enable_lograge' do |app|
+      initializer 'europeana_logging.enable_lograge' do |app|
         app.config.lograge.enabled = true
       end
 
-      if Rails.env == 'production'
-        # Configure lograge
-        initializer 'europeana_lobbing.configure_lograge' do |app|
-          app.config.lograge.custom_options = lambda do |event|
-            if event.payload.key?(:redis_runtime)
-              { redis: event.payload[:redis_runtime].to_f.round(2) }
-            else
-              {}
-            end
+      # Configure lograge
+      initializer 'europeana_logging.configure_lograge' do |app|
+        app.config.lograge.custom_options = lambda do |event|
+          if event.payload.key?(:redis_runtime)
+            { redis: event.payload[:redis_runtime].to_f.round(2) }
+          else
+            {}
           end
-          app.config.lograge.formatter = Lograge::Formatters::Logstash.new
         end
+        app.config.lograge.formatter = Lograge::Formatters::Logstash.new
+      end
 
-        # Configure Logstash
-        initializer 'europeana_logging.configure_logstash' do |app|
-          app.config.logger = LogStashLogger.new(type: :stdout)
-          LogStashLogger.configure do |config|
-            config.customize_event do |event|
-              event['level'] = event.remove('severity')
-              event['thread'] = Thread.current.object_id.to_s
-            end
+      # Configure Logstash
+      initializer 'europeana_logging.configure_logstash' do |app|
+        app.config.logger = Rails.logger = LogStashLogger.new(type: :stdout)
+        LogStashLogger.configure do |config|
+          config.customize_event do |event|
+            event['level'] = event.remove('severity')
+            event['thread'] = Thread.current.object_id.to_s
           end
         end
       end
