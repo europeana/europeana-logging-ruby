@@ -24,7 +24,8 @@ module Europeana
 
       # Configure Logstash
       initializer 'europeana_logging.configure_logstash' do |app|
-        app.config.logger = Rails.logger = LogStashLogger.new(type: :stdout)
+        stdout_logger = LogStashLogger.new(type: :stdout)
+        app.config.logger = Rails.logger = ActionController::Base.logger = stdout_logger
         LogStashLogger.configure do |config|
           config.customize_event do |event|
             event['level'] = event.remove('severity')
