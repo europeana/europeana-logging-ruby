@@ -12,13 +12,19 @@ module Europeana
 
       # Configure lograge
       initializer 'europeana_logging.configure_lograge' do |app|
+        ApplicationController.send :include, Europeana::Logging::LogragePayload
+
         app.config.lograge.custom_options = lambda do |event|
-          if event.payload.key?(:redis_runtime)
-            { redis: event.payload[:redis_runtime].to_f.round(2) }
-          else
-            {}
+          {}.tap do |custom|
+            if event.payload.key?(:redis_runtime)
+              custom[:redis] = event.payload[:redis_runtime].to_f.round(2)
+            end
+            if event.payload.key?(:session)
+              custom[:session] = event.payload[:session]
+            end
           end
         end
+
         app.config.lograge.formatter = Lograge::Formatters::Logstash.new
       end
 
