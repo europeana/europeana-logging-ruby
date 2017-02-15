@@ -6,7 +6,7 @@ module Europeana
 
       def append_info_to_payload(payload)
         super
-        payload[:session] = session.id
+        payload[:session_id] = session.id
       end
     end
   end

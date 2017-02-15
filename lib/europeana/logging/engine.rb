@@ -19,8 +19,8 @@ module Europeana
             if event.payload.key?(:redis_runtime)
               custom[:redis] = event.payload[:redis_runtime].to_f.round(2)
             end
-            if event.payload.key?(:session)
-              custom[:session] = event.payload[:session]
+            if event.payload.key?(:session_id)
+              custom[:session_id] = event.payload[:session_id]
             end
           end
         end
