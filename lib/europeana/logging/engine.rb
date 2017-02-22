@@ -12,7 +12,7 @@ module Europeana
 
       # Configure lograge
       initializer 'europeana_logging.configure_lograge' do |app|
-        ApplicationController.send :include, Europeana::Logging::LogragePayload
+        ApplicationController.send :include, Europeana::Logging::LogSessionId
 
         app.config.lograge.custom_options = lambda do |event|
           {}.tap do |custom|
@@ -29,15 +29,23 @@ module Europeana
       end
 
       # Configure Logstash
-      initializer 'europeana_logging.configure_logstash' do |app|
-        stdout_logger = LogStashLogger.new(type: :stdout)
-        app.config.logger = Rails.logger = ActionController::Base.logger = stdout_logger
+      initializer 'europeana_logging.configure_logstash' do |_app|
         LogStashLogger.configure do |config|
           config.customize_event do |event|
             event['level'] = event.remove('severity')
             event['thread'] = Thread.current.object_id.to_s
           end
         end
+      end
+
+      # Init app loggers
+      initializer 'europeana_logging.set_app_loggers' do |app|
+        app.config.logger = LogStashLogger.new(type: :stdout)
+
+        Rails.logger = LogStashLogger.new(type: :stdout)
+
+        ActionController::Base.logger = LogStashLogger.new(type: :stdout)
+        ActionController::Base.logger.extend(Europeana::Logging::SessionLogging)
       end
     end
   end
