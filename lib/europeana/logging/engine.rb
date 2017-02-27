@@ -12,8 +12,6 @@ module Europeana
 
       # Configure lograge
       initializer 'europeana_logging.configure_lograge' do |app|
-        ApplicationController.send :include, Europeana::Logging::LogSessionId
-
         app.config.lograge.custom_options = lambda do |event|
           {}.tap do |custom|
             if event.payload.key?(:redis_runtime)
@@ -46,6 +44,11 @@ module Europeana
 
         ActionController::Base.logger = LogStashLogger.new(type: :stdout)
         ActionController::Base.logger.extend(Europeana::Logging::SessionLogging)
+      end
+
+      # Controller concern for session ID logging
+      initializer 'europeana_logging.application_controller_log_session_id' do |_app|
+        ApplicationController.send :include, Europeana::Logging::LogSessionId
       end
     end
   end
