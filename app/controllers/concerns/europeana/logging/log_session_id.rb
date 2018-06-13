@@ -20,7 +20,7 @@ module Europeana
       end
 
       def session_id_from_session
-        session.is_a?(Hash) ? session[:id] : session.id
+        session.respond_to?(:id) ? session.id : nil
       end
     end
   end
