@@ -42,7 +42,6 @@ module Europeana
 
         Rails.logger = LogStashLogger.new(type: :stdout)
 
-
         ApplicationController.superclass.logger = LogStashLogger.new(type: :stdout)
         ApplicationController.superclass.logger.extend(Europeana::Logging::SessionLogging)
       end
