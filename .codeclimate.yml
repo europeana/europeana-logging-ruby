@@ -2,6 +2,6 @@ plugins:
   brakeman:
     enabled: true
   bundler-audit:
-    enabled: true
+    enabled: false
   rubocop:
     enabled: true
