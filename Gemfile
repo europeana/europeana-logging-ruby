@@ -14,10 +14,15 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
+group :development do
+  gem 'brakeman'
+  gem 'bundler-audit'
+end
+
 group :test do
   gem 'coveralls', require: false
 end
 
 group :test, :development do
-  gem 'rubocop', '0.39.0', require: false # only update when Hound does
+  gem 'rubocop', '0.53', require: false
 end
