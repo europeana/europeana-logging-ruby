@@ -42,8 +42,9 @@ module Europeana
 
         Rails.logger = LogStashLogger.new(type: :stdout)
 
-        ActionController::Base.logger = LogStashLogger.new(type: :stdout)
-        ActionController::Base.logger.extend(Europeana::Logging::SessionLogging)
+
+        ApplicationController.superclass.logger = LogStashLogger.new(type: :stdout)
+        ApplicationController.superclass.logger.extend(Europeana::Logging::SessionLogging)
       end
 
       # Controller concern for session ID logging
