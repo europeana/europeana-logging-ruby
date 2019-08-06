@@ -12,13 +12,17 @@ module Europeana
 
       # Configure lograge
       initializer 'europeana_logging.configure_lograge' do |app|
-        app.config.lograge.custom_options = lambda do |event|
-          {}.tap do |custom|
-            if event.payload.key?(:redis_runtime)
-              custom[:redis] = event.payload[:redis_runtime].to_f.round(2)
-            end
-            if event.payload.key?(:session_id)
-              custom[:session_id] = event.payload[:session_id]
+        if app.config.lograge.custom_options.nil?
+          app.config.lograge.custom_options = lambda do |event|
+            {}.tap do |custom|
+              if event.payload.key?(:redis_runtime)
+                custom[:redis] = event.payload[:redis_runtime].to_f.round(2)
+              end
+              %i(session_id cf_connecting_ip cf_ipcountry).each do |key|
+                if event.payload.key?(key)
+                  custom[key] = event.payload[key]
+                end
+              end
             end
           end
         end
