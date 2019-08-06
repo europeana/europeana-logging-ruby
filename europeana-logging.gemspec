@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/europeana/europeana-logging-ruby'
   s.summary     = 'Europeana logging'
   s.description = 'Common logging configuration for Europeana Ruby applications'
-  s.license     = 'EUPL-1.1'
+  s.license     = 'EUPL-1.2'
 
   s.required_ruby_version = '>= 2.0.0'
 
